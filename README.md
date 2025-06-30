@@ -1,8 +1,8 @@
-** HOW TO INSTALL **
+## HOW TO INSTALL
 
 1. Download as Zip
 2. Extract the Zip
-3. Paste chrome://extensions/ into your url
+3. Open this link: [Click Me!](chrome://extensions/)
 4. Click Load unpacked
 5. Select the directory that contains the files
 6. Done!!!
