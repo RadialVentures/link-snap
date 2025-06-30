@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 160px;     /* smaller width */
+      height: 80px;     /* smaller height */
+      background-color: #f3f6fb;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+  background: transparent;               /* make background fully transparent */
+  border: 2px solid #0a66c2;             /* blue border */
+  color: #0a66c2;                        /* blue text */
+  border-radius: 40px;
+  padding: 14px 40px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  letter-spacing: 1.2px;
+}
+
+button:hover {
+  background: #0a66c2;                   /* fill blue on hover */
+  color: white;
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.5);
+  transform: translateY(-2px);
+}
+
+button:active {
+  box-shadow: 0 2px 8px rgba(10, 102, 194, 0.6);
+  transform: translateY(1px);
+}
+
+
+  </style>
+</head>
+<body>
+  <button id="saveUrlBtn">Save Profile</button>
+  <script src="popup.js"></script>
+</body>
+</html>
