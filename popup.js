@@ -1,4 +1,4 @@
-// ⏰ Wake up the service worker as soon as the popup opens
+// Wake up the service worker as soon as the popup opens
 chrome.runtime.sendMessage({ type: "ping" });
 
 document.getElementById("saveUrlBtn").addEventListener("click", () => {
