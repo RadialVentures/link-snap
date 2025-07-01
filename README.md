@@ -2,7 +2,7 @@
 
 1. Click Blue Code Button then Download Zip
 2. Extract the Zip
-3. Paste chrome://extensions/ into your URL
+3. Paste `chrome://extensions/` into your URL
 4. Click Load unpacked
 5. Select the directory that contains the files
 6. Done!!!
