@@ -1,6 +1,6 @@
   {
   "manifest_version": 3,
-  "name": "LinkedIn Profile URL Saver",
+  "name": "Link Snap",
   "version": "1.0",
   "description": "Save LinkedIn profile URLs to Google Sheets.",
   "permissions": ["tabs", "scripting", "notifications"],
