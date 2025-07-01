@@ -1,0 +1,24 @@
+  {
+  "manifest_version": 3,
+  "name": "LinkedIn Profile URL Saver",
+  "version": "1.0",
+  "description": "Save LinkedIn profile URLs to Google Sheets.",
+  "permissions": ["tabs", "scripting", "notifications"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "host_permissions": [
+    "https://script.google.com/macros/s/*",
+    "*://*.linkedin.com/*",
+    "https://www.linkedin.com/*",
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [{
+    "resources": ["success.mp3"],
+    "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
