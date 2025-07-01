@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
-// 🔄 LOADER UI
+// Loader UI
 function showLoader() {
   if (document.getElementById("profileSaveLoader")) return;
 
@@ -51,14 +51,14 @@ function hideLoader() {
   if (loader) loader.remove();
 }
 
-// 🔊 SOUND
+// Sound function
 function playSuccessSound() {
   const audio = new Audio(chrome.runtime.getURL("success.mp3"));
   audio.volume = 0.5;
   audio.play().catch((err) => console.error("Sound error:", err));
 }
 
-// ✅ POPUP UI (centered)
+// POPUP UI (centered)
 function showPopup(message = "✅ Success", bgColor = "#0a66c2") {
   const popup = document.createElement("div");
   popup.textContent = message;
