@@ -4,8 +4,8 @@
 2. Extract the Zip
 3. Paste `chrome://extensions/` into your URL
 4. Click Load unpacked
-5. Select the directory that contains the files
-6. Done!!!
+5. Locate the link-snap-main directory and select it
+6. Its now successfully installed!
 
 ## HOW TO USE
 1. Pin the extension
