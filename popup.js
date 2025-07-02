@@ -9,8 +9,9 @@ document.getElementById("saveUrlBtn").addEventListener("click", () => {
         url: tab.url,
         tabId: tab.id
       });
+      window.close(); // close popup immediately after click
     } else {
-      //You aren't on a linkedin profile page
+      // Inject overlay message into the page
       chrome.scripting.executeScript({
         target: {tabId: tab.id},
         func: () => {
@@ -33,15 +34,14 @@ document.getElementById("saveUrlBtn").addEventListener("click", () => {
 
           requestAnimationFrame(() => {
             msg.style.opacity = "1";
-        });
-        setTimeout(() => {
-          msg.style.opacity = "0";
-          setTimeout(() => msg.remove(), 300);
-        }, 2000);
-      }
-    });
-  }
-
-    window.close(); // close popup immediately
+          });
+          setTimeout(() => {
+            msg.style.opacity = "0";
+            setTimeout(() => msg.remove(), 300);
+          }, 2000);
+        }
+      });
+      window.close(); // close popup immediately after injection
+    }
   });
 });
