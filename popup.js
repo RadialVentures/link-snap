@@ -3,10 +3,19 @@ chrome.runtime.sendMessage({ type: "ping" });
 
 document.getElementById("saveUrlBtn").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-    if (tab && tab.url.includes("linkedin.com/in/")) {
+    if (tab && (tab.url.includes("linkedin.com/in/") || tab.url.includes("linkedin.com/company/"))) {
+      let urlToSave = tab.url;
+      // If it's a company profile, trim to base company URL
+      const companyMatch = tab.url.match(/(https:\/\/www\.linkedin\.com\/company\/[^\/]+\/)?.*/);
+      if (tab.url.includes("linkedin.com/company/")) {
+        const match = tab.url.match(/(https:\/\/www\.linkedin\.com\/company\/[^\/]+\/)?.*/);
+        if (match && match[1]) {
+          urlToSave = match[1];
+        }
+      }
       chrome.runtime.sendMessage({
         type: "saveUrl",
-        url: tab.url,
+        url: urlToSave,
         tabId: tab.id
       });
       window.close(); // close popup immediately after click
