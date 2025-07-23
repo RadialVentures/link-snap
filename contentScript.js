@@ -4,6 +4,12 @@ chrome.runtime.onMessage.addListener((msg) => {
     showPopup("✔ Profile Saved", "#0a66c2"); 
   } else if (msg.action === "showFailure") {
     showPopup("❌ Failed to Save", "#c20a0a");
+  } else if (msg.action === "showLoader") {
+    showLoader();
+  } else if (msg.action === "hideLoader") {
+    hideLoader();
+  } else if (msg.action === "showPopup") { // Generic popup for custom messages
+    showPopup(msg.message, msg.bgColor);
   }
 });
 

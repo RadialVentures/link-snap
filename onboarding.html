@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connect Your Virtual Newsroom</title>
+    <link rel="stylesheet" href="popup.css"> <!-- Re-using existing styles -->
+    <style>
+        html, body {
+            height: 100vh; /* Make html and body take full viewport height */
+            margin: 0; /* Remove default margins */
+            display: flex; /* Make body a flex container */
+            flex-direction: column; /* Align items vertically */
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .onboarding-container {
+            width: 350px;
+            padding: 20px;
+            background-color: #fff; /* Optional: add a background to the container */
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: -400px; /* Move the container up by 50px */
+        }
+        h2 {
+            color: #0a66c2;
+            margin-bottom: 20px;
+        }
+        input[type="email"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #0a66c2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #084c90;
+        }
+        #statusMessage {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="onboarding-container">
+        <h2>Connect Your Virtual Newsroom Account</h2>
+        <p>Please enter the email you used to sign up for Virtual Newsroom to connect your Extension:</p>
+        <form id="connectionForm">
+            <input type="email" id="userEmail" placeholder="your.email@example.com" required>
+            <button type="submit">Connect</button>
+        </form>
+        <div id="statusMessage"></div>
+    </div>
+
+    <script src="onboarding.js"></script>
+</body>
+</html> 

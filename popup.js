@@ -54,3 +54,19 @@ document.getElementById("saveUrlBtn").addEventListener("click", () => {
     }
   });
 });
+
+// Check for a token in the URL hash on popup load
+window.addEventListener('load', () => {
+  const urlParams = new URLSearchParams(window.location.hash.substring(1));
+  const userToken = urlParams.get('token');
+
+  if (userToken) {
+    chrome.storage.local.set({ userToken: userToken }, () => {
+      console.log('User token saved:', userToken);
+      // Optionally, remove the token from the URL hash to keep it clean
+      history.replaceState(null, '', window.location.pathname);
+    });
+  } else {
+    console.log('No user token found in URL.');
+  }
+});
