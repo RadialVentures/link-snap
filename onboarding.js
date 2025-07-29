@@ -1,4 +1,3 @@
-// This will be your n8n webhook URL. You'll need to create this in n8n.
 const N8N_WEBHOOK_URL = "https://radial25.app.n8n.cloud/webhook/onboard-user";
 
 document.getElementById("connectionForm").addEventListener("submit", async (event) => {
@@ -24,7 +23,6 @@ document.getElementById("connectionForm").addEventListener("submit", async (even
       chrome.runtime.sendMessage({ type: "setGoogleSheetId", sheetId: data.sheetID }, () => {
         statusMessage.innerText = "✅ Account connected successfully!";
         statusMessage.style.color = "#28a745";
-        // Optionally, close the tab or redirect after a delay
         setTimeout(() => {
           window.close(); // Close the onboarding tab/window
         }, 2000);
