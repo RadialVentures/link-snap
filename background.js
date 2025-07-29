@@ -101,8 +101,7 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    // Redirect the user to your React app's onboarding/connection page
-    // IMPORTANT: Replace 'YOUR_REACT_APP_ONBOARDING_URL' with the actual URL
+    // Redirect the user to the React app's onboarding/connection page
     chrome.tabs.create({ url: chrome.runtime.getURL('onboarding.html') });
   }
 });
