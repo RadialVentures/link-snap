@@ -1,11 +1,12 @@
 ## HOW TO INSTALL
 
-1. Click Blue Code Button then Download Zip
+1. Click the big "Code" Button then click "Download ZIP"
 2. Extract the Zip
 3. Paste `chrome://extensions/` into your URL
 4. Click Load unpacked
-5. Locate the link-snap-main directory and select it
-6. Its now successfully installed!
+5. Locate the "link-snap-main" directory and select it
+6. A new page will open prompting you to connect your email(make sure its the same one you used for your Virtual Newsroom)
+7. After connecting the page will automatically close after 2 seconds and you have succesfully installed Link Snap! 🎉
 
 ## HOW TO USE
 1. Pin the extension
@@ -14,10 +15,4 @@
 
 ----
 
-Currently working on getting this curation tool on the chrome store so its more accessible. 
-
-## New Instructions When On Store
-
-1. Download & Install Link-Snap
-2. A new page will open prompting you to connect your email(make sure its the same one as you VN)
-3. Then you will be connected and can save your own sources
+⚠️ Currently working on getting this curation tool on the Chrome Store so its more accessible ⚠️
