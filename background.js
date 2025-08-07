@@ -112,20 +112,63 @@ function saveProfileToSupabase(profileUrl, tabId) {
       return;
     }
     
-    // Save to Supabase
-    fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/profiles', {
-      method: 'POST',
+    // First check if profile already exists
+    fetch(`https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/profiles?user_id=eq.${userId}&profile_url=eq.${encodeURIComponent(profileUrl)}`, {
+      method: 'GET',
       headers: {
         'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
         'Authorization': `Bearer ${supabaseToken}`,
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user_id: userId,
-        profile_url: profileUrl
-      })
+      }
     })
     .then(async response => {
+      if (response.ok) {
+        const existingProfiles = await response.json();
+        
+        if (existingProfiles && existingProfiles.length > 0) {
+          // Profile already exists
+          console.log('Profile already exists, skipping insertion');
+          chrome.tabs.sendMessage(tabId, { action: "hideLoader" });
+          chrome.tabs.sendMessage(tabId, {
+            action: "showPopup",
+            message: "ℹ️ Profile already saved",
+            bgColor: "#3498db"
+          });
+          return;
+        }
+        
+        // Profile doesn't exist, proceed with insertion
+        console.log('Profile does not exist, proceeding with insertion');
+        
+        // Save to Supabase
+        return fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/profiles', {
+          method: 'POST',
+          headers: {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
+            'Authorization': `Bearer ${supabaseToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            profile_url: profileUrl
+          })
+        });
+      } else {
+        // Error checking for duplicates
+        console.error('Error checking for existing profile:', response.status);
+        chrome.tabs.sendMessage(tabId, { action: "hideLoader" });
+        chrome.tabs.sendMessage(tabId, {
+          action: "showPopup",
+          message: "❌ Error checking for duplicates",
+          bgColor: "#e74c3c"
+        });
+        return null;
+      }
+    })
+    .then(async response => {
+      // If response is null, it means we already handled the duplicate case
+      if (!response) return;
+      
       chrome.tabs.sendMessage(tabId, { action: "hideLoader" });
       
       console.log('Supabase response status:', response.status);
