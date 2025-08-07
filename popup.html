@@ -1,19 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Link Snap</title>
   <link rel="stylesheet" href="popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <img src="icon.png" alt="Link Snap" class="logo">
-    <h1>Link Snap</h1>
-  </header>
-  <main>
-    <button id="saveUrlBtn">Save LinkedIn Profile</button>
-    <div id="status"></div>
-  </main>
+  <div class="popup-container">
+    <!-- Header -->
+    <div class="popup-header">
+      <div class="header-icon">
+        <img src="icon.png" alt="Link Snap" class="logo">
+      </div>
+      <div class="header-content">
+        <h1 class="header-title">Link Snap</h1>
+        <p class="header-subtitle">Save LinkedIn Profiles</p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="popup-main">
+      <div class="action-section">
+        <div class="action-icon">&#128279;</div>
+        <h2 class="action-title">Save Current Profile</h2>
+        <p class="action-description">Click below to save this LinkedIn profile to your collection</p>
+        
+        <button id="saveUrlBtn" class="save-button">
+          <span class="button-icon">&#128190;</span>
+          <span class="button-text">Save Profile</span>
+        </button>
+        
+        <div id="status" class="status-message"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="popup-footer">
+      <span class="footer-text">&#169; Virtual Newsroom</span>
+    </div>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

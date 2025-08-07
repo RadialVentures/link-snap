@@ -2,14 +2,14 @@
   "manifest_version": 3,
   "name": "Link Snap",
   "version": "1.0",
-  "description": "Save LinkedIn profile URLs to Google Sheets.",
+  "description": "Save LinkedIn profile URLs to your Virtual Newsroom account.",
   "permissions": ["tabs", "scripting", "notifications", "storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
   "host_permissions": [
-    "https://script.google.com/macros/s/*",
+    "https://ynmlvuadmjldoupujeib.supabase.co/*",
     "*://*.linkedin.com/*",
     "https://www.linkedin.com/*",
     "<all_urls>"
