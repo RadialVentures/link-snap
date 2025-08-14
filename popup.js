@@ -36,17 +36,15 @@ function handleExpiredToken() {
     statusDiv.style.display = 'block';
   }
   
-  // Open onboarding page for reconnection
-  setTimeout(() => {
-    chrome.tabs.create({
-      url: chrome.runtime.getURL('onboarding.html')
-    });
-    window.close();
-  }, 2000);
+  // Open reconnection info page immediately
+  chrome.tabs.create({
+    url: chrome.runtime.getURL('reconnect.html')
+  });
+  window.close();
 }
 
-// Check token expiration on popup load
-window.addEventListener('load', async () => {
+// Check token expiration immediately when the popup script runs (no window load delay)
+(async () => {
   console.log("Checking token expiration...");
   
   // Get stored token
@@ -80,7 +78,7 @@ window.addEventListener('load', async () => {
   } else {
     console.log('No user token found in URL.');
   }
-});
+})();
 
 console.log("Looking for save button...");
 const saveBtn = document.getElementById("saveUrlBtn");

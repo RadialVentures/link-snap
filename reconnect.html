@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconnect Your Account</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --danger: #ef4444;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+    }
+    * { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    html, body { height: 100%; margin: 0; background: linear-gradient(135deg, var(--bg) 0%, #e2e8f0 100%); display: flex; align-items: center; justify-content: center; }
+    .card { width: 640px; max-width: 92vw; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 20px 60px rgba(99,102,241,.15), 0 8px 24px rgba(15,23,42,.1); overflow: hidden; }
+    .content { padding: 28px; }
+    .header { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .badge { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; font-weight: 700; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
+    h1 { margin: 8px 0 6px; font-size: 22px; color: var(--text); }
+    p.sub { margin: 0 0 18px; color: var(--text-secondary); }
+    .steps { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    ol { margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.55; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .btn { appearance: none; border: none; cursor: pointer; border-radius: 10px; padding: 12px 16px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #fff; box-shadow: 0 6px 16px rgba(99,102,241,.35); }
+    .btn-outline { background: #fff; color: var(--text); border: 1px solid var(--border); }
+    .hint { margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
+    .footer { padding: 12px 16px; background: #f8fafc; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center; }
+    .token { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="content">
+      <div class="header">
+        <span class="badge">Session expired</span>
+      </div>
+      <h1>Reconnect your Virtual Newsroom account</h1>
+      <p class="sub">Your connection token (JWT) has expired. Please fetch a new token from your Virtual Newsroom and paste it in the extension onboarding.</p>
+
+      <div class="steps">
+        <ol>
+          <li>Open your Virtual Newsroom dashboard.</li>
+          <li>Find the Link Snap connection token in your account/settings.</li>
+          <li>Copy the token and return to the extension's onboarding page to paste it.</li>
+        </ol>
+        <div class="actions">
+          <button id="openVNR" class="btn btn-primary">Open Virtual Newsroom</button>
+          <button id="openOnboarding" class="btn btn-outline">Open Onboarding</button>
+        </div>
+        <div class="hint">Tip: Keep this tab open while you copy your token.</div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>Link Snap</span>
+      <span class="token">If you already have a token, open onboarding and paste it</span>
+    </div>
+  </div>
+  <script src="reconnect.js"></script>
+</body>
+</html>
+
+

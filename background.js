@@ -4,6 +4,84 @@ if (typeof chrome.storage !== 'undefined') {
   console.log("chrome.storage.local: ", typeof chrome.storage.local, chrome.storage.local);
 }
 
+// When the extension saves a new token, mark it as confirmed in the user's profile
+chrome.storage.onChanged.addListener(async (changes, area) => {
+  if (area !== 'local' || !changes.supabaseToken || !changes.supabaseToken.newValue) return;
+  try {
+    // Normalize token: strip whitespace/newlines that break base64url
+    const supabaseTokenRaw = changes.supabaseToken.newValue || '';
+    const supabaseToken = supabaseTokenRaw.replace(/\s+/g, '');
+    const parts = supabaseToken.split('.');
+    if (parts.length !== 3) return;
+    const payload = JSON.parse(atob(parts[1]));
+    const userId = payload.sub;
+    if (!userId) return;
+
+    const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4';
+    const base = `https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/user_profiles`;
+    const headers = {
+      'apikey': apiKey,
+      'Authorization': `Bearer ${supabaseToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+
+    // Prefer RPC to perform an UPDATE under your RLS (no PATCH)
+    try {
+      const rpcResp = await fetch(`https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/rpc/mark_extension_token_confirmed?apikey=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({})
+      });
+      if (rpcResp.ok) {
+        console.log('extension_token_confirmed updated via RPC (bg)');
+        return;
+      } else {
+        const t = await rpcResp.text();
+        console.warn('RPC mark_extension_token_confirmed failed, falling back:', rpcResp.status, t);
+      }
+    } catch (e) {
+      console.warn('RPC call error, falling back to REST:', e);
+    }
+
+    // 1) Check if row exists
+    const getResp = await fetch(`${base}?user_id=eq.${userId}&select=id&apikey=${encodeURIComponent(apiKey)}`, { headers });
+    const rows = getResp.ok ? await getResp.json() : [];
+    const exists = Array.isArray(rows) && rows.length > 0;
+
+    if (exists) {
+      // 2a) Upsert via POST using the primary key id to avoid duplicates
+      const id = rows[0].id;
+      const upsertResp = await fetch(`${base}?apikey=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { ...headers, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ id, user_id: userId, extension_token_confirmed: true })
+      });
+      if (!upsertResp.ok) {
+        const text = await upsertResp.text();
+        console.warn('Failed to UPSERT extension_token_confirmed (bg):', upsertResp.status, text);
+      } else {
+        console.log('extension_token_confirmed updated (bg)');
+      }
+    } else {
+      // 2b) Create row if missing
+      const postResp = await fetch(`${base}?apikey=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { ...headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ user_id: userId, extension_token_confirmed: true })
+      });
+      if (!postResp.ok) {
+        const text = await postResp.text();
+        console.warn('Failed to INSERT extension_token_confirmed (bg):', postResp.status, text);
+      } else {
+        console.log('extension_token_confirmed inserted (bg)');
+      }
+    }
+  } catch (e) {
+    console.warn('Error setting extension_token_confirmed (bg):', e);
+  }
+});
+
 chrome.runtime.onMessage.addListener((message, sender) => {
   console.log("Background script received message:", message);
   
@@ -24,7 +102,9 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         files: ["contentScript.js"]
       },
       () => {
-        console.log("Content script injected, showing loader...");
+        console.log("Content script injected, requesting profile name and showing loader...");
+        // Ask content script for display name
+        chrome.tabs.sendMessage(message.tabId, { action: "extractProfileName" });
         // Step 2: Show loader
         chrome.tabs.sendMessage(message.tabId, { action: "showLoader" });
 
@@ -33,6 +113,20 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         saveProfileToSupabase(message.url, message.tabId);
       }
     );
+  }
+});
+
+let latestExtractedName = null;
+let latestExtractedImage = null;
+
+// Receive extracted name from content script
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (msg.action === 'profileNameExtracted') {
+    latestExtractedName = typeof msg.name === 'string' ? msg.name : null;
+  }
+  if (msg.action === 'profileInfoExtracted') {
+    latestExtractedName = typeof msg.name === 'string' ? msg.name : latestExtractedName;
+    latestExtractedImage = typeof msg.image === 'string' ? msg.image : latestExtractedImage;
   }
 });
 
@@ -105,9 +199,9 @@ function saveProfileToSupabase(profileUrl, tabId) {
       });
       // Clear the expired token
       chrome.storage.local.remove(['supabaseToken']);
-      // Open onboarding page for reconnection
+      // Open reconnection info page for reconnection
       chrome.tabs.create({
-        url: chrome.runtime.getURL('onboarding.html')
+        url: chrome.runtime.getURL('reconnect.html')
       });
       return;
     }
@@ -141,17 +235,20 @@ function saveProfileToSupabase(profileUrl, tabId) {
         console.log('Profile does not exist, proceeding with insertion');
         
         // Save to Supabase
-        return fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/profiles', {
+          const body = {
+            user_id: userId,
+            profile_url: profileUrl
+          };
+          if (latestExtractedName) body.profile_name = latestExtractedName;
+          if (latestExtractedImage) body.profile_image_url = latestExtractedImage;
+          return fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/profiles', {
           method: 'POST',
           headers: {
             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
             'Authorization': `Bearer ${supabaseToken}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            user_id: userId,
-            profile_url: profileUrl
-          })
+            body: JSON.stringify(body)
         });
       } else {
         // Error checking for duplicates
@@ -209,6 +306,10 @@ function saveProfileToSupabase(profileUrl, tabId) {
           });
           // Clear the invalid token
           chrome.storage.local.remove(['supabaseToken']);
+          // Open reconnection info page
+          chrome.tabs.create({
+            url: chrome.runtime.getURL('reconnect.html')
+          });
         } else if (response.status === 403) {
           chrome.tabs.sendMessage(tabId, {
             action: "showPopup",
