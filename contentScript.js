@@ -28,6 +28,8 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
+
+
 // Loader UI
 function showLoader() {
   if (document.getElementById("profileSaveLoader")) return;

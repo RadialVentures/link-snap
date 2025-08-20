@@ -54,10 +54,37 @@
             padding: 32px 28px;
         }
 
+        /* Loading Indicator */
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-container p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin: 0;
+        }
+
         /* Header Section */
         .header-icon {
-            fontSize: 3rem;
-            marginBottom: 16px;
+            font-size: 3rem;
+            margin-bottom: 16px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -99,50 +126,71 @@
             gap: 8px;
         }
 
-        .instructions ol {
+        .instructions {
             margin: 0;
-            padding-left: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.5;
+            padding: 0;
+            list-style: none;
+            counter-reset: instruction-counter;
         }
 
         .instructions li {
-            margin-bottom: 8px;
+            counter-increment: instruction-counter;
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .instructions li:before {
+            content: counter(instruction-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .instructions li:last-child {
             margin-bottom: 0;
         }
 
-        /* Token Input Section */
+        /* Token Section */
         .token-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 24px;
         }
 
         .token-label {
             color: var(--text);
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 8px;
-            text-align: left;
+            margin: 0 0 16px 0;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .token-input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             border: 2px solid var(--border);
             border-radius: 8px;
-            font-family: monospace;
-            font-size: 11px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
             background: var(--surface);
-            color: var(--text);
-            transition: all 0.2s ease;
-            resize: vertical;
-            min-height: 80px;
+            margin-bottom: 12px;
         }
 
         .token-input:focus {
@@ -151,141 +199,125 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
-        .token-input::placeholder {
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Button Styling */
         .connect-button {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 12px 32px;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0 auto;
-        }
-
-        .connect-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
-        }
-
-        .connect-button:active {
-            transform: translateY(0);
-        }
-
-        /* Status Message */
-        #statusMessage {
-            margin-top: 16px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 8px 12px;
-            border-radius: 6px;
-            display: none;
-        }
-
-        .status-error {
-            background: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-
-        .status-success {
-            background: #f0fdf4;
-            color: var(--success);
-            border: 1px solid #bbf7d0;
-        }
-
-        /* Success State */
-        .success-container {
-            text-align: center;
-            padding: 40px 28px;
-        }
-
-        .success-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--success) 0%, #10b981 50%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 8px rgba(34, 197, 94, 0.4));
-            animation: bounce 0.6s ease-in-out;
-        }
-
-        .success-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin: 0 0 12px 0;
-            background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .success-description {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            margin: 0 0 20px 0;
-            line-height: 1.4;
-        }
-
-        .success-features {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 2px solid var(--success);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.1);
-        }
-
-        .features-title {
-            color: var(--success);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .feature-list {
+        .connect-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .connect-button:active {
+            transform: translateY(0);
+        }
+
+        /* Status Messages */
+        #statusMessage {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
             text-align: left;
-            margin: 0 auto;
-            max-width: 300px;
+        }
+
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Success Section */
+        .success-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+
+        .success-title {
+            color: var(--success);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .success-description {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+
+        .success-features {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .features-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .feature-item {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .feature-item:last-child {
-            margin-bottom: 0;
+            text-align: left;
         }
 
         .feature-icon {
-            font-size: 1.1rem;
-            color: var(--success);
-            flex-shrink: 0;
-            margin-top: 2px;
+            font-size: 20px;
+            color: var(--primary);
+            min-width: 24px;
         }
 
         .feature-text {
             color: var(--text);
-            font-size: 0.9rem;
+            font-size: 14px;
             line-height: 1.4;
+        }
+
+        #userInfo {
+            margin-bottom: 24px;
         }
 
         .auto-close-indicator {
@@ -293,58 +325,45 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-style: italic;
-            margin-top: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
         .pulse-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
+            width: 8px;
+            height: 8px;
             background: var(--success);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        /* Animations */
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
-        /* Responsive */
-        @media (max-width: 520px) {
-            .onboarding-container {
-                width: 95vw;
-                margin: 20px;
-            }
-            
+        /* Responsive Design */
+        @media (max-width: 480px) {
             .content-wrapper {
                 padding: 24px 20px;
+            }
+            
+            .onboarding-container {
+                width: 95vw;
             }
         }
     </style>
 </head>
 <body>
     <div class="onboarding-container">
-        <div id="onboardingSection" class="content-wrapper">
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Initializing extension...</p>
+        </div>
+
+        <div id="onboardingSection" class="content-wrapper" style="display: none;">
             <!-- Header Section -->
             <div style="text-align: center; margin-bottom: 24px;">
                 <div class="header-icon">&#128279;</div>
@@ -359,28 +378,36 @@
                     Setup Instructions
                 </div>
                 <ol class="instructions">
-                    <li>Log in to your <strong>Virtual Newsroom account</strong></li>
-                    <li>Copy the <strong>connection token</strong> shown in the onboarding modal</li>
-                    <li>Paste the token below and click <strong>"Connect"</strong></li>
+                    <li>Enter your <strong>Virtual Newsroom account credentials</strong></li>
+                    <li>Click <strong>"Sign In"</strong> to connect your extension</li>
+                    <li>Your extension will stay connected automatically</li>
                 </ol>
             </div>
 
-            <!-- Token Input Section -->
+            <!-- Login Form Section -->
             <div class="token-section">
                 <div class="token-label">
                     <span>&#128273;</span>
-                    Your Connection Token
+                    Your Account Credentials
                 </div>
                 <form id="connectionForm">
-                    <textarea 
-                        id="userToken" 
-                        placeholder="Paste your connection token here..." 
+                    <input 
+                        type="email" 
+                        id="userEmail" 
+                        placeholder="Enter your email address" 
                         class="token-input" 
                         required
-                    ></textarea>
+                    />
+                    <input 
+                        type="password" 
+                        id="userPassword" 
+                        placeholder="Enter your password" 
+                        class="token-input" 
+                        required
+                    />
                     <button type="submit" class="connect-button">
                         <span>&#128640;</span>
-                        Connect Extension
+                        Sign In & Connect
                     </button>
                 </form>
                 <div id="statusMessage"></div>
@@ -413,6 +440,8 @@
                 </div>
             </div>
 
+            <div id="userInfo"></div>
+            
             <div class="auto-close-indicator">
                 <div class="pulse-dot"></div>
                 Extension is ready to use! You can close this tab.
@@ -420,6 +449,8 @@
         </div>
     </div>
 
+    <script src="supabaseClient.js"></script>
+    <script src="background.js"></script>
     <script src="onboarding.js"></script>
 </body>
 </html> 

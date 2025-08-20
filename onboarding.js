@@ -1,36 +1,45 @@
-// Check for existing token on page load
-window.addEventListener('load', () => {
-  chrome.storage.local.get('supabaseToken', (data) => {
-    if (data.supabaseToken) {
+
+
+// Check for existing session on page load
+window.addEventListener('load', async () => {
+  // Hide loading indicator immediately since we don't need to wait for CDN
+  document.getElementById('loadingIndicator').style.display = 'none';
+  
+  // Check for existing session
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
       // User is already connected
       document.getElementById('onboardingSection').style.display = 'none';
       document.getElementById('connectedSection').style.display = 'block';
+      updateUserInfo(session.user);
+    } else {
+      // No session, show onboarding section
+      document.getElementById('onboardingSection').style.display = 'block';
     }
-  });
+  } catch (error) {
+    console.error('Error checking session on load:', error);
+    // Show onboarding section on error
+    document.getElementById('onboardingSection').style.display = 'block';
+  }
 });
 
-// Handle form submission for token connection
+// Handle form submission for authentication
 document.getElementById("connectionForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  // Normalize token: remove all whitespace characters to avoid invalid base64url errors
-  const rawToken = document.getElementById("userToken").value;
-  const userToken = rawToken ? rawToken.replace(/\s+/g, '').trim() : '';
+  const email = document.getElementById("userEmail").value;
+  const password = document.getElementById("userPassword").value;
   const statusMessage = document.getElementById("statusMessage");
 
-  // Basic validation: must be JWT-like with 3 base64url segments
-  const isBase64Url = (s) => /^[A-Za-z0-9_-]+$/.test(s || '');
-  const parts = (userToken || '').split('.');
-  const looksLikeJwt = parts.length === 3 && isBase64Url(parts[0]) && isBase64Url(parts[1]) && isBase64Url(parts[2]);
-
-  if (!userToken || !looksLikeJwt) {
-    statusMessage.innerText = "Please enter a valid token.";
+  if (!email || !password) {
+    statusMessage.innerText = "Please enter both email and password.";
     statusMessage.className = "status-error";
     statusMessage.style.display = "block";
     return;
   }
 
-  statusMessage.innerText = "Connecting...";
+  statusMessage.innerText = "Signing in...";
   statusMessage.className = "";
   statusMessage.style.display = "block";
   statusMessage.style.color = "var(--primary)";
@@ -38,68 +47,106 @@ document.getElementById("connectionForm").addEventListener("submit", async (even
   statusMessage.style.border = "1px solid var(--border)";
 
   try {
-    // Store the token
-    await chrome.storage.local.set({ supabaseToken: userToken });
-    
-    // Test the token by making a simple request to Supabase
-    // This validates both the token format and that it belongs to a valid user
-    const testResponse = await fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/profiles?select=count', {
-      method: 'GET',
-      headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
-        'Authorization': `Bearer ${userToken}`,
-        'Content-Type': 'application/json'
-      }
+    console.log('Attempting to sign in with:', { email });
+
+    // Sign in with Supabase
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
     });
 
-    if (testResponse.ok) {
-      // Mark the token as confirmed in the user's profile (for reconnection verification)
-      try {
-        const tokenParts = userToken.split('.');
-        if (tokenParts.length === 3) {
-          const payload = JSON.parse(atob(tokenParts[1]));
-          const userId = payload.sub;
-          if (userId) {
-            const flagResp = await fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/user_profiles', {
-              method: 'POST',
-              headers: {
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
-                'Authorization': `Bearer ${userToken}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'resolution=merge-duplicates'
-              },
-              body: JSON.stringify({
-                user_id: userId,
-                extension_token_confirmed: true
-              })
-            });
-            if (!flagResp.ok) {
-              const text = await flagResp.text();
-              console.warn('Failed to set extension_token_confirmed:', flagResp.status, text);
-            } else {
-              console.log('extension_token_confirmed set successfully');
-            }
-          }
-        }
-      } catch (flagErr) {
-        console.warn('Could not set extension_token_confirmed flag:', flagErr);
-      }
+    console.log('Sign in response:', { data, error });
 
+    if (error) {
+      throw error;
+    }
+
+    if (data.session) {
+      // Successfully authenticated
       statusMessage.innerHTML = "&#9989; Connected successfully!";
       statusMessage.className = "status-success";
+      
+      // Update user_profiles table to mark extension as connected
+      console.log('Attempting to update user profile for user ID:', data.user.id);
+      
+      try {
+        // Make direct REST API call to update user_profiles table
+        const response = await fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/user_profiles?user_id=eq.' + data.user.id, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
+            'Authorization': `Bearer ${data.session.access_token}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            has_onboarded_extension: true,
+            updated_at: new Date().toISOString()
+          })
+        });
+
+        if (response.ok) {
+          console.log('User profile updated successfully - extension now connected!');
+          // Update status message to show connection success
+          statusMessage.innerHTML = "&#9989; Extension connected to Virtual Newsroom!";
+        } else {
+          const errorData = await response.json();
+          console.error('Failed to update user profile:', errorData);
+        }
+      } catch (profileErr) {
+        console.error('Error updating user profile:', profileErr);
+        // Don't fail the connection, just log the error
+      }
       
       // Show success section
       setTimeout(() => {
         document.getElementById('onboardingSection').style.display = 'none';
         document.getElementById('connectedSection').style.display = 'block';
+        updateUserInfo(data.user);
       }, 1000);
     } else {
-      throw new Error('Invalid token');
+      throw new Error('No session created');
     }
   } catch (error) {
-    console.error("Error connecting account:", error);
-    statusMessage.innerHTML = "&#10060; Invalid token. Please check your token and try again.";
+    console.error("Error signing in:", error);
+    console.error("Error details:", {
+      message: error.message,
+      code: error.code,
+      status: error.status,
+      name: error.name
+    });
+    
+    let errorMessage = "Sign in failed. Please check your credentials.";
+    
+    if (error.message.includes('Invalid login credentials')) {
+      errorMessage = "Invalid email or password. Please try again.";
+    } else if (error.message.includes('Email not confirmed')) {
+      errorMessage = "Please confirm your email address before signing in.";
+    } else if (error.message.includes('fetch')) {
+      errorMessage = "Network error. Please check your internet connection.";
+    }
+    
+    statusMessage.innerHTML = `&#10060; ${errorMessage}`;
     statusMessage.className = "status-error";
     statusMessage.style.display = "block";
   }
-}); 
+});
+
+// Function to update user info display
+function updateUserInfo(user) {
+  const userInfoDiv = document.getElementById('userInfo');
+  if (userInfoDiv && user) {
+    userInfoDiv.innerHTML = `
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 10px;">
+          Welcome, ${user.email}
+        </div>
+        <div style="font-size: 0.9em; color: #666;">
+          User ID: ${user.id}
+        </div>
+      </div>
+    `;
+  }
+}
+
+ 
