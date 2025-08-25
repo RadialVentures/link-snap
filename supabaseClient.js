@@ -69,9 +69,69 @@ class SimpleAuthClient {
       if (session && session.expires_at > Date.now()) {
         return { data: { session }, error: null };
       }
+      
+      // If session is expired but we have a refresh token, try to refresh it
+      if (session && session.refresh_token && session.expires_at <= Date.now()) {
+        console.log('Session expired, attempting to refresh...');
+        const refreshResult = await this.refreshSession();
+        if (refreshResult.data && refreshResult.data.session) {
+          console.log('Session refreshed successfully');
+          return { data: { session: refreshResult.data.session }, error: null };
+        } else {
+          console.log('Session refresh failed, clearing expired session');
+          await this.clearStoredSession();
+          return { data: { session: null }, error: null };
+        }
+      }
+      
       return { data: { session: null }, error: null };
     } catch (error) {
       return { data: { session: null }, error };
+    }
+  }
+
+  async refreshSession() {
+    try {
+      const session = await this.getStoredSession();
+      if (!session || !session.refresh_token) {
+        throw new Error('No refresh token available');
+      }
+
+      console.log('Refreshing session with refresh token...');
+      const response = await fetch(`${this.client.url}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': this.client.key,
+          'Authorization': `Bearer ${this.client.key}`
+        },
+        body: JSON.stringify({
+          refresh_token: session.refresh_token
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Token refresh failed:', response.status, errorData);
+        throw new Error(errorData.error_description || 'Token refresh failed');
+      }
+
+      const data = await response.json();
+      console.log('Token refresh successful, updating session...');
+      
+      // Update session with new tokens
+      const updatedSession = {
+        ...session,
+        access_token: data.access_token,
+        refresh_token: data.refresh_token || session.refresh_token,
+        expires_at: Date.now() + (data.expires_in * 1000)
+      };
+
+      await this.storeSession(updatedSession);
+      return { data: { session: updatedSession }, error: null };
+    } catch (error) {
+      console.error('Session refresh error:', error);
+      return { data: null, error };
     }
   }
 
@@ -79,6 +139,18 @@ class SimpleAuthClient {
     try {
       const session = await this.getStoredSession();
       if (session && session.user) {
+        // Check if session is expired and try to refresh if needed
+        if (session.expires_at <= Date.now() && session.refresh_token) {
+          console.log('Session expired in getUser, attempting to refresh...');
+          const refreshResult = await this.refreshSession();
+          if (refreshResult.data && refreshResult.data.session) {
+            return { data: { user: refreshResult.data.session.user }, error: null };
+          } else {
+            // Refresh failed, clear session
+            await this.clearStoredSession();
+            return { data: { user: null }, error: null };
+          }
+        }
         return { data: { user: session.user }, error: null };
       }
       return { data: { user: null }, error: null };
