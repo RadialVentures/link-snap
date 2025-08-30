@@ -1,5 +1,3 @@
-
-
 // Wake up the service worker as soon as the popup opens
 console.log("Popup.js loading...");
 chrome.runtime.sendMessage({ type: "ping" });

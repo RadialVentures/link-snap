@@ -10,7 +10,7 @@
     "default_icon": "icon.png"
   },
   "host_permissions": [
-    "https://ynmlvuadmjldoupujeib.supabase.co/*",
+    "https://vqwcdrtnnnykkuaxuaqd.supabase.co/*",
     "*://*.linkedin.com/*",
     "https://www.linkedin.com/*",
     "<all_urls>"

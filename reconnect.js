@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const payload = JSON.parse(atob(parts[1]));
       const userId = payload.sub;
       if (!userId) return;
-      const resp = await fetch('https://ynmlvuadmjldoupujeib.supabase.co/rest/v1/user_profiles', {
+      const resp = await fetch('https://vqwcdrtnnnykkuaxuaqd.supabase.co/rest/v1/user_profiles', {
         method: 'POST',
         headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlubWx2dWFkbWpsZG91cHVqZWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTkzMzYsImV4cCI6MjA2NjUzNTMzNn0.vifa6z50XCItrH1zqK7xsRKUUIjD_ZAsUC-EfLwTmf4',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxd2NkcnRubm55a2t1YXh1YXFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5MzIzNTMsImV4cCI6MjA3MTUwODM1M30.9Jk6UFw9YHyIwxU9jeaSmne0NcfQVONEQCIzwVNPaM0',
           'Authorization': `Bearer ${supabaseToken}`,
           'Content-Type': 'application/json',
           'Prefer': 'resolution=merge-duplicates'
