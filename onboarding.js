@@ -97,10 +97,13 @@ document.getElementById("connectionForm").addEventListener("submit", async (even
       }
       
       // Show success section
-      setTimeout(() => {
+      setTimeout(async () => {
         document.getElementById('onboardingSection').style.display = 'none';
         document.getElementById('connectedSection').style.display = 'block';
-        updateUserInfo(data.user);
+        
+        // Get the complete user data with metadata
+        const { data: { user: fullUserData } } = await supabase.auth.getUser();
+        updateUserInfo(fullUserData);
       }, 1000);
     } else {
       throw new Error('No session created');
@@ -137,7 +140,7 @@ function updateUserInfo(user) {
     userInfoDiv.innerHTML = `
       <div style="text-align: center; margin-bottom: 20px;">
         <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 10px;">
-          Welcome, ${user.email}
+          CONNECTED TO: ${user.email}
         </div>
         <div style="font-size: 0.9em; color: #666;">
           User ID: ${user.id}

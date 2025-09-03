@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect Virtual Newsroom</title>
+    <title>Connect to Virtual Newsroom</title>
     <style>
         /* Modern Indigo/Purple Color Palette */
         :root {
@@ -41,7 +41,7 @@
         }
 
         .onboarding-container {
-            width: 480px;
+            width: 500px;
             max-width: 90vw;
             background: var(--surface);
             border-radius: 16px;
@@ -94,7 +94,7 @@
         h2 {
             margin: 0 0 8px 0;
             color: var(--text);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             line-height: 1.3;
         }
@@ -114,6 +114,9 @@
             padding: 20px;
             margin-bottom: 24px;
             text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .instructions-title {
@@ -170,6 +173,9 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 24px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .token-label {
@@ -344,7 +350,7 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             .content-wrapper {
                 padding: 24px 20px;
             }
@@ -367,8 +373,7 @@
             <!-- Header Section -->
             <div style="text-align: center; margin-bottom: 24px;">
                 <div class="header-icon">&#128279;</div>
-                <h2>Connect Your Virtual Newsroom Account</h2>
-                <p class="subtitle">Set up Link Snap to save LinkedIn profiles effortlessly</p>
+                <h2>Connect Your Virtual Newsroom Account</h2>  
             </div>
 
             <!-- Instructions Section -->
@@ -416,8 +421,8 @@
 
         <div id="connectedSection" style="display: none;" class="success-container">
             <div class="success-icon">&#127881;</div>
-            <h2 class="success-title">Extension Connected Successfully!</h2>
-            <p class="success-description">Your Link Snap Chrome extension is now connected to your Virtual Newsroom account</p>
+            <h2 class="success-title">Connected Successfully!!!</h2>
+            <p class="success-description">Your Link Snap is now connected to your Virtual Newsroom account</p>
             
             <div class="success-features">
                 <div class="features-title">
@@ -427,15 +432,19 @@
                 <div class="feature-list">
                     <div class="feature-item">
                         <span class="feature-icon">&#128188;</span>
-                        <span class="feature-text"><strong>Save LinkedIn profiles</strong> with a single click</span>
+                        <span class="feature-text"><strong>Save LinkedIn profiles</strong> by clicking the save button</span>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item">  
                         <span class="feature-icon">&#128202;</span>
-                        <span class="feature-text"><strong>Track saved profiles</strong> in your dashboard</span>
+                        <span class="feature-text"><strong>Track saved profiles</strong> in the app</span>
                     </div>
                     <div class="feature-item">
                         <span class="feature-icon">&#128640;</span>
-                        <span class="feature-text"><strong>Seamless integration</strong> with Virtual Newsroom</span>
+                        <span class="feature-text"><strong>Seamless integration</strong> with your Virtual Newsroom</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">💡</span>
+                        <span class="feature-text"><strong>Tip/Recommendation:</strong> Pin the extension to your browser toolbar for easy access! Click the puzzle piece icon and pin "Link Snap".</span>
                     </div>
                 </div>
             </div>
@@ -444,7 +453,7 @@
             
             <div class="auto-close-indicator">
                 <div class="pulse-dot"></div>
-                Extension is ready to use! You can close this tab.
+                Extension is ready to use! Please close out this tab.
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const openVNR = document.getElementById('openVNR');
   const openOnboarding = document.getElementById('openOnboarding');
 
-  const virtualNewsroomUrl = 'https://virtual-newsroom-radial.vercel.app/';
+  const virtualNewsroomUrl = 'https://virtualnewsroom.vercel.app/';
 
   openVNR?.addEventListener('click', () => {
     chrome.tabs.create({ url: virtualNewsroomUrl });
