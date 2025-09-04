@@ -12,7 +12,7 @@ A Chrome extension that makes saving LinkedIn profiles quick and easy.
 
 1. **Download the extension**
   - Click the green **`Code`** button on this repository
-  - Select **Download ZIP**
+  - Select **Download ZIP** from the dropdown
 
 2. **Extract the ZIP**
   - **Windows:** Right-click the downloaded ZIP → *Extract All*
