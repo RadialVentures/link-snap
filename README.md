@@ -1,20 +1,66 @@
-## HOW TO INSTALL
+# Link Snap
 
-1. Click the big "Code" Button then click "Download ZIP"
-2. If on Windows extract the downloaded Zip to get the folder
-3. If on Mac just double click the downloaded Zip to extract the folder
-4. Paste `chrome://extensions/` into your URL
-5. Locate the developer mode toggle and turn it on
-6. Click the Load unpacked button and locate the "link-snap-main" directory and select it
-7. A new page will open prompting you to enter your login credentials(which should be the same login credentials you used for your Virtual Newsroom)
-8. After the connection completes you can close out all extension tabs and you have succesfully installed Link Snap! 🎉
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)]()
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow)](https://chrome.google.com/webstore/category/extensions)
 
-## HOW TO USE
-1. I highly recommend you pin the extension
-2. When on a LinkedIn profile click the extension then click the save button
+A Chrome extension that makes saving LinkedIn profiles quick and easy.
 
-P.S. Within the Link Snap pop-up you can sign out and sign back into a different account(Also you can view the current active account thats connected)
+---
 
-----
+## 🚀 Installation
 
-⚠️ Currently working on getting Link-Snap to the Chrome Store ⚠️
+1. **Download the extension**
+  - Click the green **`Code`** button on this repository
+  - Select **Download ZIP**
+
+2. **Extract the ZIP**
+  - **Windows:** Right-click the downloaded ZIP → *Extract All*
+  - **Mac:** Double-click the ZIP to extract
+
+3. **Enable Developer Mode in Chrome**
+   - Open Chrome and paste this into your URL bar:
+     ```
+     chrome://extensions/
+     ```
+   - Toggle **Developer Mode** on (top-right corner)
+
+4. **Load the extension**
+   - Click **Load unpacked**
+   - Select the extracted folder (usually named `link-snap-main` or `link-snap`)
+
+5. **Log in**
+   - After loading, a login page will appear
+   - Enter the same credentials you use for your **Virtual Newsroom**
+
+6. **Complete setup** 🎉
+   - Once it says Connection Success, you can close the setup tabs
+   - Link Snap is now installed!
+
+---
+
+## 📌 Usage
+
+1. (Optional but recommended) **Pin the extension** to your Chrome toolbar for easy access
+2. Open a LinkedIn profile
+3. Click the **Link Snap icon** → press **Save**
+
+---
+
+## 🔑 Additional Notes
+
+- You can **sign out** and switch accounts from the extension pop-up
+- The pop-up also shows your **currently active account**
+- ⚠️ If you sign in to your **Virtual Newsroom** account on a different computer, you will need to sign back into both the Chrome extension and Virtual Newsroom again on the **previous computer**
+
+---
+
+## ⚠️ Coming Soon
+
+Currently working on publishing **Link Snap** ot the Chrome Web Store. 
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
