@@ -1,7 +1,7 @@
 # Link Snap
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)]()
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow)](https://chrome.google.com/webstore/category/extensions)
 
 A Chrome extension that makes saving LinkedIn profiles quick and easy.
