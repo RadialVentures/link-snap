@@ -1,10 +1,11 @@
   {
   "manifest_version": 3,
   "name": "Link Snap",
-  "version": "1.0",
-  "description": "Save LinkedIn profile URLs to your Virtual Newsroom account.",
-  "permissions": ["tabs", "scripting", "notifications", "storage"],
-
+  "version": "1.0.0",
+  "description": "Snap LinkedIn profiles.",
+  "permissions": [
+    "tabs", "scripting", "notifications", "storage"
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
@@ -12,11 +13,10 @@
   "host_permissions": [
     "https://vqwcdrtnnnykkuaxuaqd.supabase.co/*",
     "*://*.linkedin.com/*",
-    "https://www.linkedin.com/*",
     "<all_urls>"
   ],
   "web_accessible_resources": [{
-    "resources": ["success.mp3", "onboarding.html", "onboarding.js", "test-db.html", "supabaseClient.js"],
+    "resources": ["onboarding.html", "onboarding.js", "supabaseClient.js"],
     "matches": ["<all_urls>"]
   }],
   "background": {

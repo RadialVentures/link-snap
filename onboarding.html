@@ -16,7 +16,6 @@
             --surface: #ffffff;          /* White */
             --text: #0f172a;             /* Slate-900 */
             --text-secondary: #475569;   /* Slate-600 */
-            --text-muted: #64748b;       /* Slate-500 */
             --border: #d1d5db;           /* Gray-300 */
             --border-focus: #6366f1;     /* Primary for focus states */
         }
@@ -86,6 +85,7 @@
             font-size: 3rem;
             margin-bottom: 16px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
@@ -99,15 +99,8 @@
             line-height: 1.3;
         }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            margin: 0 0 24px 0;
-            line-height: 1.4;
-        }
-
-        /* Instructions Section */
-        .instructions-card {
+        /* Card Section */
+        .card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border: 2px solid #e2e8f0;
             border-radius: 12px;
@@ -119,7 +112,7 @@
             margin-right: auto;
         }
 
-        .instructions-title {
+        .card-title {
             color: var(--text);
             font-size: 1rem;
             font-weight: 600;
@@ -164,28 +157,6 @@
 
         .instructions li:last-child {
             margin-bottom: 0;
-        }
-
-        /* Token Section */
-        .token-section {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .token-label {
-            color: var(--text);
-            font-size: 1rem;
-            font-weight: 600;
-            margin: 0 0 16px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .token-input {
@@ -348,17 +319,6 @@
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .content-wrapper {
-                padding: 24px 20px;
-            }
-            
-            .onboarding-container {
-                width: 95vw;
-            }
-        }
     </style>
 </head>
 <body>
@@ -377,8 +337,8 @@
             </div>
 
             <!-- Instructions Section -->
-            <div class="instructions-card">
-                <div class="instructions-title">
+            <div class="card">
+                <div class="card-title">
                     <span>&#128203;</span>
                     Setup Instructions
                 </div>
@@ -390,8 +350,8 @@
             </div>
 
             <!-- Login Form Section -->
-            <div class="token-section">
-                <div class="token-label">
+            <div class="card">
+                <div class="card-title">
                     <span>&#128273;</span>
                     Your Account Credentials
                 </div>

@@ -1,6 +1,5 @@
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.action === "showSuccess") {
-    playSuccessSound();
     showPopup("✔ Profile Saved", "#0a66c2"); 
   } else if (msg.action === "showFailure") {
     showPopup("❌ Failed to Save", "#c20a0a");
@@ -28,9 +27,7 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
-
-
-// Loader UI
+// Loader UI to show while saving profile
 function showLoader() {
   if (document.getElementById("profileSaveLoader")) return;
 
@@ -74,14 +71,7 @@ function hideLoader() {
   if (loader) loader.remove();
 }
 
-// Sound function
-function playSuccessSound() {
-  const audio = new Audio(chrome.runtime.getURL("success.mp3"));
-  audio.volume = 0.5;
-  audio.play().catch((err) => console.error("Sound error:", err));
-}
-
-// POPUP UI (centered)
+// Popup to show success message
 function showPopup(message = "✅ Success", bgColor = "#0a66c2") {
   const popup = document.createElement("div");
   popup.textContent = message;

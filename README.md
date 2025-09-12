@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-yellow)](https://chrome.google.com/webstore/category/extensions)
 
-A Chrome extension that makes saving LinkedIn profiles quick and easy.
+A Chrome extension that makes saving LinkedIn profiles quick and easy(neccesary for Virtual Newsroom intial onboarding).
 
 ---
 
