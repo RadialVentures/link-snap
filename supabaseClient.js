@@ -1,6 +1,6 @@
 // Supabase client configuration for Chrome extension
 const supabaseUrl = 'https://vqwcdrtnnnykkuaxuaqd.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxd2NkcnRubm55a2t1YXh1YXFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5MzIzNTMsImV4cCI6MjA3MTUwODM1M30.9Jk6UFw9YHyIwxU9jeaSmne0NcfQVONEQCIzwVNPaM0';
+const supabaseKey = '';
 
 // Create a simple Supabase client implementation
 class SimpleSupabaseClient {
